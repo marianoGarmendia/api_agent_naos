@@ -3,7 +3,7 @@ from langchain_core.messages import HumanMessage
 import os
 from flask_cors import CORS
 
-from naos.main import react_graph
+from main import react_graph
 
 
 app = Flask(__name__)
