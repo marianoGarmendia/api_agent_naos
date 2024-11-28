@@ -1,1 +1,1 @@
-web: python naos/server.py
+web: waitress-serve  server:app
