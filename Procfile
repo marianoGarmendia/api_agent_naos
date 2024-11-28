@@ -1,1 +1,1 @@
-web: python naos/serve.py
+web: python naos/server.py
