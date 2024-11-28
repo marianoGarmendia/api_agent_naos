@@ -5,6 +5,7 @@ from langchain_core.messages import HumanMessage
 from graph import react_graph
 import os
 import sys
+# agregado para langgraph studio
 # sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 

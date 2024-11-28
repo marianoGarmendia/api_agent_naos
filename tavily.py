@@ -5,8 +5,7 @@ TAVILY_API_KEY = os.environ["TAVILY_API_KEY"]
 
 
 from langchain_community.tools import TavilySearchResults
-
-tool = TavilySearchResults(
+tavilyTool = TavilySearchResults(
     name="Naos_Kingdom_Proteinas",
     max_results=5,
     include_answer=True,
@@ -44,6 +43,8 @@ tool = TavilySearchResults(
     description="""
         Utiliza esta herramienta para buscar informacion sobre los suplementos de Naos Kingdom.
         precio, beneficios, ingredientes, marca y más detalles, como asi tambien cantidades, sabores, promociones etc.
+        Si te preguntan por un producto en especifico, ingresa a la url especifica y busca la información solicitada.
+        url de ejemplo "https://naoskingdom.com/products/producto",
     """,
    
     # include_raw_content=True,
@@ -57,7 +58,7 @@ llm = ChatOpenAI(model="gpt-4o")
 
 
 
-tools=[tool]
+tools=[tavilyTool]
 
 llm_with_tools = llm.bind_tools(tools)
 

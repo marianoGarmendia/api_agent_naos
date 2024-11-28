@@ -3,7 +3,7 @@
         "."
     ],
     "graphs": {
-        "stockbroker": "./naos/main.py:react_graph"
+        "stockbroker": "./graph.py:react_graph"
     },
     "env": ".env"
 }

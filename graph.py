@@ -1,7 +1,8 @@
 
 import os
 import sys
-# sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+# Agregado para langgraph studio
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 from langchain_openai import ChatOpenAI
 from langchain_community.tools import TavilySearchResults
@@ -42,7 +43,7 @@ retriever_tool_faq = create_retriever_tool(
 
 
 tavilyTool = TavilySearchResults(
-    name="Naos_Kingdom_Proteinas",
+    name="Naos_Kingdom_Productos",
     max_results=5,
     include_answer=True,
     include_raw_content=True,
@@ -106,7 +107,7 @@ sys_msg = SystemMessage(content="""
 Rol = Eres un experto vendedor de la empresa Naos kingdom, debes representarlos y hablar sobre sus productos en tono positivo. refiriendote a uds como los mejores del mercado. ("nosotros", "nuestro", etc)
 siempre que respondes hablas en primera persona del plural
                         
-Uso obligatorio de la herramienta:
+** SI TE PREGUNTAN SOBRE PRECIOS DE PRODUCTOS , STOCK , INGREDIENTES, BENEFICIOS, PROMOCIONES, SABORES, ETC. DEBES RESPONDER CON INFORMACION VERIDICA Y ACTUALIZADA CON LA HERRAMIENTA "naos_kingdom_productos" **
 
 - Ésta herramienta debes usarla para obtener informacion relacionada a suplementos de Naos Kingdom.
 - los enlaces web que estas consultando son: 
@@ -138,14 +139,6 @@ Uso obligatorio de la herramienta:
                         "https://naoskingdom.com/products/white-deer-growth",
                         "https://naoskingdom.com/products/red-deer-immunity"
 
-- son los únicos enlaces donde puedes usar para buscar información de:
-- Vas a recibir preguntas como:
-                        
-                        Dime el precio de... 
-                        que beneficios tienen ...
-                        que precios tienen ...
-
-                        más preguntas relacionadas a los suplementos de Naos Kingdom.
 
                                                 
 respuesta:
@@ -166,7 +159,7 @@ Por favor, extrae la siguiente información del sitio web de Naos Kingdom que co
 - Repesenta esos datos bien formateados en la respuesta.
                          
     
-                                         
+-----------------------                           
                         
 ** Si estas respondiendo sobre el estado de pedido de shopify, debes usar la herramienta "get_shopify_order_status" o "get_shopify_order_status_by_num_seguimiento" para obtener la información de la orden de pedido de shopify.
 
@@ -181,6 +174,10 @@ El formato de la respuesta sobre el estado del envío del pedido debe ser siguie
     'Última persona con el pedido': ''
 
 No dudes en preguntar si necesitas más información.
+                        
+*** SI HACEN UNA PREGUNTA RELACIONADA AL USO, COMBINACIONES, RECOMENDACIOES, EFECTOS SECUNDARIOS, NUTRICION, COMO TOMARLOS, DEBES PRIMERO CONSULTAR EN LA HERRAMIENTA "obtener_informacion_de_naos_faq" Y LUEGO RESPONDER CON LA INFORMACION QUE ENCUENTRES.
+SI NO ENCONTRASTE UNA RESPUESTA A LA PREGUNTA PUEDES CONSULTAR EN LA HERRAMIENTA "obtener_informacion_de_naos" PARA OBTENER INFORMACION DE LOS PRODUCTOS DE NAOS KINGDOM Y COMPLEMENTAR TU RESPUESTA.                       
+***                        
 
 
                         """)
@@ -209,8 +206,8 @@ builder.add_conditional_edges(
     tools_condition,
 )
 builder.add_edge("tools", "assistant")
-memory = MemorySaver()
-react_graph = builder.compile(checkpointer=memory)
+# memory = MemorySaver()
+react_graph = builder.compile()
 
 # Show
 # display(Image(react_graph.get_graph(xray=True).draw_mermaid_png()))
