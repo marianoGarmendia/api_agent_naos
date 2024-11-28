@@ -9,4 +9,6 @@ mi_entorno/
 
 *.env
 
+env
+
 *docs
