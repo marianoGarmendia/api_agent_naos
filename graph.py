@@ -206,8 +206,8 @@ builder.add_conditional_edges(
     tools_condition,
 )
 builder.add_edge("tools", "assistant")
-# memory = MemorySaver()
-react_graph = builder.compile()
+memory = MemorySaver()
+react_graph = builder.compile(checkpointer=memory)
 
 # Show
 # display(Image(react_graph.get_graph(xray=True).draw_mermaid_png()))
