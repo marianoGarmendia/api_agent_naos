@@ -1,1 +1,1 @@
-web: waitress-serve --port=$PORT naos.server:app
+web: waitress-serve --port=$PORT server:app
