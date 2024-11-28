@@ -9,7 +9,10 @@ import sys
 
 # Instanciar FastAPI
 app = FastAPI()
-
+print("FastAPI inicializado")
+print("FastAPI inicializado")
+print("server.py")
+print(sys.path)
 # Configurar CORS
 app.add_middleware(
     CORSMiddleware,

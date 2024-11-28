@@ -14,6 +14,8 @@ from langgraph.prebuilt import ToolNode
 from rag import rag_load
 from toolShopify import get_shopify_order_status , get_shopify_order_status_by_num_seguimiento
 from dotenv import load_dotenv
+print("main.py")
+print(sys.path)
 
 
 load_dotenv()
