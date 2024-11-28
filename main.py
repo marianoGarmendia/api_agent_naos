@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from langchain_core.messages import HumanMessage
-from app.graph import react_graph
+from graph import react_graph
 import os
 import sys
 # sys.path.append(os.path.dirname(os.path.abspath(__file__)))
