@@ -1,7 +1,7 @@
 
 import os
 import sys
-# sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 from langchain_openai import ChatOpenAI
 from langchain_community.tools import TavilySearchResults
@@ -11,8 +11,8 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import START, StateGraph
 from langgraph.prebuilt import tools_condition
 from langgraph.prebuilt import ToolNode
-from .rag import rag_load
-from .toolShopify import get_shopify_order_status , get_shopify_order_status_by_num_seguimiento
+from rag import rag_load
+from toolShopify import get_shopify_order_status , get_shopify_order_status_by_num_seguimiento
 from dotenv import load_dotenv
 
 
