@@ -8,6 +8,7 @@ from langchain_core.tools import tool
 from langchain_core.tools import StructuredTool
 
 
+
 class ShopifyOrdersInput(BaseModel):
     order_number: str = Field(description="Numero de orden de shopify, (debe empezar siempre con las letras: EN)")
 

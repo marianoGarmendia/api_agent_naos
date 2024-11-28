@@ -1,4 +1,4 @@
-*_pycache_/
+*__pycache__/
 
 
 # Ignorar todos los archivos .ipynb (Jupyter notebooks)
@@ -8,3 +8,5 @@
 mi_entorno/
 
 *.env
+
+*docs
