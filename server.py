@@ -2,10 +2,10 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from langchain_core.messages import HumanMessage
-from naos.main import react_graph
+from app.naos.main import react_graph
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 # Instanciar FastAPI
