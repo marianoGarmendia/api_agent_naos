@@ -7,7 +7,7 @@ from naos.main import react_graph
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app,origins="https://uiagentnaos-production.up.railway.app")
 
 @app.route('/api/message', methods=['POST'])
 def handle_message():
