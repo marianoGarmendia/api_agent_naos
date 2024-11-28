@@ -1,0 +1,10 @@
+*_pycache_/
+
+
+# Ignorar todos los archivos .ipynb (Jupyter notebooks)
+*.ipynb
+
+# Ignorar la carpeta mi_entorno
+mi_entorno/
+
+*.env
