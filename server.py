@@ -4,6 +4,8 @@ from pydantic import BaseModel
 from langchain_core.messages import HumanMessage
 from naos.main import react_graph
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 # Instanciar FastAPI
 app = FastAPI()
