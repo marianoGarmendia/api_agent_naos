@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 
-from app.naos.utils.load import doc_load, text_splitters, connect_to_astra_vstore, add_docs_astra_and_get_retriever
+from app.utils.load import doc_load, text_splitters, connect_to_astra_vstore, add_docs_astra_and_get_retriever
 
 load_dotenv()
 
