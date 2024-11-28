@@ -1,7 +1,7 @@
 
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+# sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 from langchain_openai import ChatOpenAI
 from langchain_community.tools import TavilySearchResults
