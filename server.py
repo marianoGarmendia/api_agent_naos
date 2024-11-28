@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from langchain_core.messages import HumanMessage
-from main import react_graph
+from naos.main import react_graph
 import os
 
 # Instanciar FastAPI
