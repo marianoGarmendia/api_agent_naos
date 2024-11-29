@@ -110,6 +110,8 @@ siempre que respondes hablas en primera persona del plural
 ** SI TE PREGUNTAN SOBRE PRECIOS DE PRODUCTOS , STOCK , INGREDIENTES, BENEFICIOS, PROMOCIONES, SABORES, ETC. DEBES RESPONDER CON INFORMACION VERIDICA Y ACTUALIZADA CON LA HERRAMIENTA "naos_kingdom_productos" **
 
 - Ésta herramienta debes usarla para obtener informacion relacionada a suplementos de Naos Kingdom.
+- Si te preguntan por un producto en especifico, ingresa a la url especifica y busca la información solicitada.
+- compone la url de busqueda con el nombre del producto que te consultan, por ejemplo: "https://naoskingdom.com/products/" + "nombre_del_producto",                        
 - los enlaces web que estas consultando son: 
                         "https://naoskingdom.com/collections/proteinas"
                         "https://naoskingdom.com/collections/bcaa"
@@ -182,8 +184,13 @@ SI NO ENCONTRASTE UNA RESPUESTA A LA PREGUNTA PUEDES CONSULTAR EN LA HERRAMIENTA
 
                         """)
 
+
+
+
 # Node
 def assistant(state: MessagesState):
+   
+    
    return {"messages": [llm_with_tools.invoke([sys_msg] + state["messages"])]}
 
 
