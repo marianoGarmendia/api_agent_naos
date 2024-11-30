@@ -41,7 +41,7 @@ retriever_tool_faq = create_retriever_tool(
     description="Usar para obtener informacion sobre las preguntas frecuentes sobre informacion relacionada a como, cuando, que, donde, por que y para que de los productos de naos, además tambien sobre consultas sobre tu pedido, problemas con el envio, devoluciones, ",
 )
 
-retriever_tool_guia = create_retriever_tool(
+retriever_tool_products = create_retriever_tool(
     retriever=retriever_products,
     name="obtener_informacion_de_productos_naos",
     description="Usar para obtener informacion de los productos naos kingdom como ingredientes, url, sabores, presentaciones",
@@ -85,10 +85,8 @@ tavilyTool = TavilySearchResults(
                         "https://naoskingdom.com/products/red-deer-immunity",
                         ],
     description="""
-        Utiliza esta herramienta para buscar informacion sobre los suplementos de Naos Kingdom.
-        precio, beneficios, ingredientes, marca y más detalles, como asi tambien cantidades, sabores, promociones etc.
-        Si te preguntan por un producto en especifico, ingresa a la url especifica y busca la información solicitada.
-        url de ejemplo "https://naoskingdom.com/products/producto",
+        Utiliza esta herramienta para buscar informacion sobre precios de los suplementos de Naos Kingdom.
+        ",
     """,
    
     # include_raw_content=True,
@@ -100,7 +98,7 @@ llm = ChatOpenAI(model="gpt-4o")
 
 
 
-tools=[tavilyTool, retriever_tool_guia, retriever_tool_faq, retriever_products,get_shopify_order_status, get_shopify_order_status_by_num_seguimiento]
+tools=[tavilyTool, retriever_tool_guia, retriever_tool_faq, retriever_tool_products,get_shopify_order_status, get_shopify_order_status_by_num_seguimiento]
 
 llm_with_tools = llm.bind_tools(tools)
 
@@ -114,10 +112,10 @@ sys_msg = SystemMessage(content="""
 Rol = Eres un experto vendedor de la empresa Naos kingdom, debes representarlos y hablar sobre sus productos en tono positivo. refiriendote a uds como los mejores del mercado. ("nosotros", "nuestro", etc)
 siempre que respondes hablas en primera persona del plural
                         
-** SI TE PREGUNTAN SOBRE PRECIOS DE PRODUCTOS , STOCK , INGREDIENTES, BENEFICIOS, PROMOCIONES, SABORES, ETC. DEBES RESPONDER CON INFORMACION VERIDICA Y ACTUALIZADA CON LA HERRAMIENTA "naos_kingdom_productos" **
+** SI TE PREGUNTAN SOBRE PRECIOS DE PRODUCTOS y STOCK  DEBES RESPONDER CON INFORMACION VERIDICA Y ACTUALIZADA CON LA HERRAMIENTA "naos_kingdom_productos" **
 
-- Ésta herramienta debes usarla para obtener informacion relacionada a suplementos de Naos Kingdom.
-- Si te preguntan por un producto en especifico, ingresa a la url especifica y busca la información solicitada.
+- Ésta herramienta debes usarla para obtener informacion relacionada a los precios y stock suplementos de Naos Kingdom.
+- Si te preguntan por el repcio de un producto en especifico, ingresa a la url especifica y busca la información solicitada.
 - compone la url de busqueda con el nombre del producto que te consultan, por ejemplo: "https://naoskingdom.com/products/" + "nombre_del_producto",                        
 - los enlaces web que estas consultando son: 
                         "https://naoskingdom.com/collections/proteinas"
@@ -150,27 +148,27 @@ siempre que respondes hablas en primera persona del plural
 
 
                                                 
-respuesta:
-                        
-- texto que creas necesario para responder la pregunta**
-- Si es más de un producto, puedes responder con una lista de productos**
+Usa la herramienta "naos_kingdom_productos" para obtener información sobre los productos y presenta la respuesta en formato JSON dentro de un bloque de código usando la sintaxis de Markdown ```json. La respuesta debe tener las siguientes propiedades:
 
- Formato de respuesta del/los producto/s encontrado/s:                       
-Por favor, extrae la siguiente información del sitio web de Naos Kingdom que consultaste:
+```json
 
-(Extrae esta información si la encuentras, si no, no inventes datos)
-- Nombre del suplemento
-- Marca del suplemento
-- Precio del suplemento
-- Porciones por envase
-- sabores disponibles                                              
-
-- Repesenta esos datos bien formateados en la respuesta.
+{
+  "nombre del producto":string, //nombre del producto consultado
+  "precio_actual":string, // precio actual del producto
+  "precio_anterior":string, // precio anterior del producto
+  "url_al_producto": string, // url del producto ej: "https://naoskingdom.com/products/nombre_del_producto"
+  "url_de_la_imagen_del_producto": string, // url de la imagen del producto
+   "tool_call_id": "naos_kingdom_productos",                    
+}
+            
+```	
+------- Devuelve el JSON plano sin caracteres adicionales, necesito leer el JSON desde el código JavaScript. Elimina cualquier formato de texto '```json' que estés agregando. Mantén la estructura del JSON siempre en inglés y solo cambia los valores del JSON al idioma que identifiques en el sitio web. La respuesta debe ser el JSON y nada más"                        
+Toda esta información debe ser extraída del contenido de la respuesta de la herramienta. Si no encuentras respuesta a alguna de esas propiedades, no la inventes y coloca "null"
                          
     
 -----------------------                           
                         
-** Si estas respondiendo sobre el estado de pedido de shopify, debes usar la herramienta "get_shopify_order_status" o "get_shopify_order_status_by_num_seguimiento" para obtener la información de la orden de pedido de shopify.
+###Si estas respondiendo sobre el estado de pedido de shopify, debes usar la herramienta "get_shopify_order_status" o "get_shopify_order_status_by_num_seguimiento" para obtener la información de la orden de pedido de shopify.
 
 El formato de la respuesta sobre el estado del envío del pedido debe ser siguiendo solo este ejemplo: :
     'número de orden': '',
