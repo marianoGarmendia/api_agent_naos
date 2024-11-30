@@ -24,7 +24,7 @@ def text_splitters(docs, pdf):
         text_splitter = CharacterTextSplitter(
         separator="\n",
         chunk_size=1500,
-        chunk_overlap=300,
+        chunk_overlap=400,
         length_function=len
         )
 

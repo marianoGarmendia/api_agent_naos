@@ -25,13 +25,13 @@ load_dotenv()
 
 TAVILY_API_KEY = os.environ["TAVILY_API_KEY"]
 
-retriever_guia, retriever_faq = rag_load(load=True)
+retriever_guia, retriever_faq , retriever_products = rag_load(load=True)
 
 from langchain.tools.retriever import create_retriever_tool
 retriever_tool_guia = create_retriever_tool(
     retriever=retriever_guia,
     name="obtener_informacion_de_naos",
-    description="Usar para obtener informacion sobre los productos de naos, proteinas, creatina, quemadores, nutrición y recomendaciones de alimentación. Utilza para responder sobre usos, beneficios, es como una guia de productos de naos kingdom",
+    description="Usar para obtener información de guía y beneficios de los productos de naos kingdom , como tomarlos, como cobinarlos, para que utilizarlos, recomendaciones.",	
     
 )
 
@@ -39,6 +39,13 @@ retriever_tool_faq = create_retriever_tool(
     retriever=retriever_faq,
     name="obtener_informacion_de_naos_faq",
     description="Usar para obtener informacion sobre las preguntas frecuentes sobre informacion relacionada a como, cuando, que, donde, por que y para que de los productos de naos, además tambien sobre consultas sobre tu pedido, problemas con el envio, devoluciones, ",
+)
+
+retriever_tool_guia = create_retriever_tool(
+    retriever=retriever_products,
+    name="obtener_informacion_de_productos_naos",
+    description="Usar para obtener informacion de los productos naos kingdom como ingredientes, url, sabores, presentaciones",
+    
 )
 
 
@@ -93,7 +100,7 @@ llm = ChatOpenAI(model="gpt-4o")
 
 
 
-tools=[tavilyTool, retriever_tool_guia, retriever_tool_faq, get_shopify_order_status, get_shopify_order_status_by_num_seguimiento]
+tools=[tavilyTool, retriever_tool_guia, retriever_tool_faq, retriever_products,get_shopify_order_status, get_shopify_order_status_by_num_seguimiento]
 
 llm_with_tools = llm.bind_tools(tools)
 

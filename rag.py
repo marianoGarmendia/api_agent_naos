@@ -11,11 +11,12 @@ load_dotenv()
 
 ruta_pdf_guia_naos = os.path.join(os.path.dirname(__file__), "data", "guia_y_beneficios_naos_productos.pdf")
 ruta_pdf_faq_naos = os.path.join(os.path.dirname(__file__), "data", "faq_naos.pdf")
+ruta_pdf_products_naos = os.path.join(os.path.dirname(__file__), "data", "Ficha_productos_NK-1.pdf")
 
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-
+print(ruta_pdf_products_naos)
 
 embeddings = OpenAIEmbeddings(
     model="text-embedding-3-large",
@@ -24,6 +25,13 @@ embeddings = OpenAIEmbeddings(
 )
 
 llm = ChatOpenAI(model="gpt-4o")
+
+# def rag_product_load():
+#       docs =  doc_load(ruta_pdf_products_naos)
+#       text_splitter = text_splitters(docs, "guia")
+#       naos_products_vector_db = connect_to_astra_vstore(embeddings, "naos_products")
+#       retriever_products =  add_docs_astra_and_get_retriever(naos_products_vector_db, text_splitter)
+#       return retriever_products 
 
 def rag_load(load):
     if load is False:    
@@ -43,11 +51,14 @@ def rag_load(load):
     else:
         naos_guia_vector_db =  connect_to_astra_vstore(embeddings, "naos_guia_beneficios")
         faq_naos_vectordb =  connect_to_astra_vstore(embeddings, "faq_naos")
+        naos_products_vector_db = connect_to_astra_vstore(embeddings, "naos_products")
+
 
         retriever_guia =  naos_guia_vector_db.as_retriever(search_kwargs={"k":5})
         retriever_faq =  faq_naos_vectordb.as_retriever(search_kwargs={"k":5})
+        retriever_products =  naos_products_vector_db.as_retriever(search_kwargs={"k":5})
 
-        return retriever_guia, retriever_faq
+        return retriever_guia, retriever_faq, retriever_products
 
 
 
