@@ -6,7 +6,7 @@ from graph import react_graph
 import os
 import sys
 # agregado para langgraph studio
-# sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 # Instanciar FastAPI
@@ -43,7 +43,8 @@ async def handle_agent(request: AgentRequest):
     threadId = request.threadId
 
     config = {
-        "configurable": {"thread_id": threadId},
+        "configurable": {"thread_id": threadId },
+        
     }
 
     # Invocar react_graph

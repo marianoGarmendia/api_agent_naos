@@ -8,11 +8,12 @@ from langchain_openai import ChatOpenAI
 from langchain_community.tools import TavilySearchResults
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import MessagesState
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from langgraph.graph import START, StateGraph
 from langgraph.prebuilt import tools_condition
 from langgraph.prebuilt import ToolNode
 from rag import rag_load
+from evaluate import evaluate_response
 from toolShopify import get_shopify_order_status , get_shopify_order_status_by_num_seguimiento
 from dotenv import load_dotenv
 
@@ -113,9 +114,11 @@ Rol = Eres un experto vendedor de la empresa Naos kingdom, debes representarlos 
 siempre que respondes hablas en primera persona del plural
                         
 ** SI TE PREGUNTAN SOBRE PRECIOS DE PRODUCTOS y STOCK  DEBES RESPONDER CON INFORMACION VERIDICA Y ACTUALIZADA CON LA HERRAMIENTA "naos_kingdom_productos" **
+                        
+###Si tienes mas de una llamada a herramienta en el mensaje, debes responder a cada una de ellas en el orden en que aparecen en el mensaje.Primero responde Una y luego responde la siguiente.                        
 
 - Ésta herramienta debes usarla para obtener informacion relacionada a los precios y stock suplementos de Naos Kingdom.
-- Si te preguntan por el repcio de un producto en especifico, ingresa a la url especifica y busca la información solicitada.
+- Si te preguntan por el precio de un producto en especifico, ingresa a la url especifica y busca la información solicitada.
 - compone la url de busqueda con el nombre del producto que te consultan, por ejemplo: "https://naoskingdom.com/products/" + "nombre_del_producto",                        
 - los enlaces web que estas consultando son: 
                         "https://naoskingdom.com/collections/proteinas"
@@ -148,7 +151,7 @@ siempre que respondes hablas en primera persona del plural
 
 
                                                 
-Usa la herramienta "naos_kingdom_productos" para obtener información sobre los productos y presenta la respuesta en formato JSON dentro de un bloque de código usando la sintaxis de Markdown ```json. La respuesta debe tener las siguientes propiedades:
+Usa la herramienta "naos_kingdom_productos" para obtener información sobre el precio los productos y presenta la respuesta en formato JSON dentro de un bloque de código usando la sintaxis de Markdown ```json. La respuesta debe tener las siguientes propiedades:
 
 ```json
 
@@ -157,11 +160,13 @@ Usa la herramienta "naos_kingdom_productos" para obtener información sobre los 
   "precio_actual":string, // precio actual del producto
   "precio_anterior":string, // precio anterior del producto
   "url_al_producto": string, // url del producto ej: "https://naoskingdom.com/products/nombre_del_producto"
-  "url_de_la_imagen_del_producto": string, // url de la imagen del producto
-   "tool_call_id": "naos_kingdom_productos",                    
+  "url_de_la_imagen_del_producto": string, // url de la imagen del producto 
+  "tool_call_id": "naos_kingdom_productos",
+  "sabores": []                    
 }
             
 ```	
+###La url de la imagen del producto debe ser la url de la imagen del producto que se encuentra en la pagina web de Naos Kingdom. extraela de ahi y pegala en la respuesta.                        
 ------- Devuelve el JSON plano sin caracteres adicionales, necesito leer el JSON desde el código JavaScript. Elimina cualquier formato de texto '```json' que estés agregando. Mantén la estructura del JSON siempre en inglés y solo cambia los valores del JSON al idioma que identifiques en el sitio web. La respuesta debe ser el JSON y nada más"                        
 Toda esta información debe ser extraída del contenido de la respuesta de la herramienta. Si no encuentras respuesta a alguna de esas propiedades, no la inventes y coloca "null"
                          
@@ -182,9 +187,9 @@ El formato de la respuesta sobre el estado del envío del pedido debe ser siguie
 
 No dudes en preguntar si necesitas más información.
                         
-*** SI HACEN UNA PREGUNTA RELACIONADA AL USO, COMBINACIONES, RECOMENDACIOES, EFECTOS SECUNDARIOS, NUTRICION, COMO TOMARLOS, DEBES PRIMERO CONSULTAR EN LA HERRAMIENTA "obtener_informacion_de_naos_faq" Y LUEGO RESPONDER CON LA INFORMACION QUE ENCUENTRES.
+###SI HACEN UNA PREGUNTA RELACIONADA AL USO, COMBINACIONES, RECOMENDACIONES, EFECTOS SECUNDARIOS, NUTRICION, COMO TOMARLOS, DEBES PRIMERO CONSULTAR EN LA HERRAMIENTA "obtener_informacion_de_naos_faq" Y LUEGO RESPONDER CON LA INFORMACION QUE ENCUENTRES.
 SI NO ENCONTRASTE UNA RESPUESTA A LA PREGUNTA PUEDES CONSULTAR EN LA HERRAMIENTA "obtener_informacion_de_naos" PARA OBTENER INFORMACION DE LOS PRODUCTOS DE NAOS KINGDOM Y COMPLEMENTAR TU RESPUESTA.                       
-***                        
+                      
 
 
                         """)
@@ -194,10 +199,8 @@ SI NO ENCONTRASTE UNA RESPUESTA A LA PREGUNTA PUEDES CONSULTAR EN LA HERRAMIENTA
 
 # Node
 def assistant(state: MessagesState):
-   
-    
+       
    return {"messages": [llm_with_tools.invoke([sys_msg] + state["messages"])]}
-
 
 
 
@@ -209,6 +212,8 @@ builder = StateGraph(MessagesState)
 builder.add_node("assistant", assistant)
 builder.add_node("tools", ToolNode(tools))
 
+
+
 # Define edges: these determine how the control flow moves
 builder.add_edge(START, "assistant")
 builder.add_conditional_edges(
@@ -218,6 +223,11 @@ builder.add_conditional_edges(
     tools_condition,
 )
 builder.add_edge("tools", "assistant")
+
+
+ 
+
+# builder.add_edge("evaluate", "assistant")
 memory = MemorySaver()
 react_graph = builder.compile(checkpointer=memory)
 

@@ -12,3 +12,8 @@ mi_entorno/
 env
 
 *docs
+
+evaluate.py 
+scraping_images_naos.py
+
+.png
