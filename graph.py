@@ -13,7 +13,7 @@ from langgraph.graph import START, StateGraph
 from langgraph.prebuilt import tools_condition
 from langgraph.prebuilt import ToolNode
 from rag import rag_load
-from evaluate import evaluate_response
+
 from toolShopify import get_shopify_order_status , get_shopify_order_status_by_num_seguimiento
 from dotenv import load_dotenv
 
